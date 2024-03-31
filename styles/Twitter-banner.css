@@ -1,0 +1,157 @@
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color: #F4F4F4;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Header and Footer */
+header, footer {
+    background: var(--primary-color);
+    color: #fff;
+    padding: 1rem 0;
+    text-align: center;
+}
+
+/* Main Content */
+#twitter-banner-creator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #f4f4f4;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* File Upload Section */
+#banner-image-upload-section, #text-controls, #banner-stickerPanel {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+/* Input, Button, and Image Styles */
+input[type="file"], button, #banner-stickerPanel img {
+    padding: 10px 15px;
+    border: 2px solid var(--primary-color);
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 10px;
+    transition: transform 0.2s, background-color 0.3s;
+}
+
+button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+}
+
+button:hover, .category-link:hover {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+/* Sticker Panel Styles */
+.category {
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #f5f5f5;
+    text-align: center;
+    display: none;
+}
+
+.category.active {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+/* Category Headers and Images */
+.category h2 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.category img {
+    flex: 1 1 auto;
+    height: auto;
+    margin: 5px;
+    object-fit: contain;
+}
+
+#banner-stickerPanel img:hover {
+    transform: scale(1.1);
+}
+
+/* Canvas Styles */
+#twitterBannerCanvas {
+    border: 2px dashed #ccc;
+    cursor: crosshair;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Generate Button */
+#generateButton {
+    padding: 10px 20px;
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    #banner-stickerPanel, #banner-image-upload-section, #text-controls {
+        flex-direction: column;
+    }
+
+    input[type="file"], button, #twitterBannerCanvas {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+
+/* Sidebar Styles */
+#category-sidebar {
+    width: 20%;
+    padding: 10px;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+}
+
+#category-sidebar h2 {
+    font-size: 1.2em;
+}
+
+#category-sidebar ul {
+    list-style: none;
+}
+
+#category-sidebar li {
+    margin-bottom: 10px;
+}
+
+.category.active img {
+    width: calc(20% - 20px);
+    max-width: none;
+}
+
+/* Style the links in the sidebar */
+.category-link {
+    text-decoration: none;
+    color: #333;
+}

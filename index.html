@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meme Generator - DinoDao</title>
+    <title>Meme Generator</title>
     <link rel="stylesheet" href="styles/styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.5.0/fabric.min.js"></script>
 </head>
@@ -13,12 +13,16 @@
         <section id="meme-generator">
             Upload Background
             <input type="file" id="imageInput" accept="image/*">
-            Upload Stickers
-            <input type="file" id="stickerUpload" accept="image/*" multiple>
             <button id="addTextButton">Add Text</button>
             <button id="generateButton">Download Meme</button>
             <canvas id="memeCanvas" width="800" height="600"></canvas>
         </section>
+        <aside id="sticker-bar">
+            <h3>Stickers</h3>
+            Upload Stickers
+            <input type="file" id="stickerUpload" accept="image/*" multiple>
+            <div id="stickers-container"></div>
+        </aside>
     </main>
 
     <script src="scripts/fabric-meme.js"></script>

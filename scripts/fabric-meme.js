@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     const canvas = new fabric.Canvas('memeCanvas', {
-        preserveObjectStacking: true // Ensures the layer order is preserved when selected
+        preserveObjectStacking: true
     });
 
     document.getElementById('imageInput').addEventListener('change', function (event) {
@@ -8,38 +8,47 @@ document.addEventListener('DOMContentLoaded', function () {
         const reader = new FileReader();
         reader.onload = function (e) {
             fabric.Image.fromURL(e.target.result, (img) => {
-                img.scaleToWidth(canvas.width);
+                const maxWidth = window.innerWidth - 20;
+                const maxHeight = window.innerHeight - 20;
+                const imgWidth = img.width;
+                const imgHeight = img.height;
+
+                const scale = Math.min(maxWidth / imgWidth, maxHeight / imgHeight, 1);
+                const canvasWidth = imgWidth * scale;
+                const canvasHeight = imgHeight * scale;
+
+                canvas.setWidth(canvasWidth);
+                canvas.setHeight(canvasHeight);
+
+                img.scaleToWidth(canvasWidth);
                 canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
             });
         };
         reader.readAsDataURL(file);
     });
-    
 
     document.getElementById('stickerUpload').addEventListener('change', function (event) {
         const files = event.target.files;
+        const stickersContainer = document.getElementById('stickers-container');
+
         for (let i = 0; i < files.length; i++) {
             const reader = new FileReader();
             reader.onload = (e) => {
-                fabric.Image.fromURL(e.target.result, (img) => {
-                    // Calculate the scale ratio to resize the image to 100x100 while maintaining aspect ratio
-                    const scale = Math.min(100 / img.width, 100 / img.height);
-                    img.set({
-                        scaleX: scale,
-                        scaleY: scale,
-                        left: 50 + i * 100, // You might want to adjust this for better positioning
-                        top: 50 + i * 50,  // You might want to adjust this for better positioning
-                    });
-                    canvas.add(img);
-                });
+                const imgElement = document.createElement('img');
+                imgElement.src = e.target.result;
+                imgElement.width = 100;
+                imgElement.height = 100;
+                imgElement.classList.add('sticker');
+                imgElement.draggable = true;
+                imgElement.ondragstart = (event) => {
+                    event.dataTransfer.setData('text', e.target.result);
+                };
+                stickersContainer.appendChild(imgElement);
             };
             reader.readAsDataURL(files[i]);
         }
     });
-    
-    
 
-    // Add interactive text to canvas
     document.getElementById('addTextButton').addEventListener('click', function () {
         const text = new fabric.IText('Edit Me', {
             left: 100,
@@ -50,9 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         canvas.add(text);
     });
-    
 
-    // Download the meme
     document.getElementById('generateButton').addEventListener('click', function () {
         const link = document.createElement('a');
         link.href = canvas.toDataURL({ format: 'png', quality: 1 });
@@ -62,7 +69,6 @@ document.addEventListener('DOMContentLoaded', function () {
         document.body.removeChild(link);
     });
 
-    // Add event listener for selecting objects
     canvas.on('object:selected', (e) => {
         const selectedObject = e.target;
         selectedObject.set({
@@ -75,14 +81,33 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Add keyboard event listener to delete selected objects
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Delete' || e.key === 'Backspace') {
             const activeObject = canvas.getActiveObject();
             if (activeObject) {
                 canvas.remove(activeObject);
             }
-    
         }
     });
+
+    canvas.getElement().ondrop = (event) => {
+        event.preventDefault();
+        const imageURL = event.dataTransfer.getData('text');
+        fabric.Image.fromURL(imageURL, (img) => {
+            img.set({
+                left: event.layerX,
+                top: event.layerY,
+                angle: 0,
+                padding: 10,
+                cornersize: 10,
+                hasRotatingPoint: true
+            });
+            canvas.add(img);
+            canvas.setActiveObject(img);
+        });
+    };
+
+    canvas.getElement().ondragover = (event) => {
+        event.preventDefault();
+    };
 });
